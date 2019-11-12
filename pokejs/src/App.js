@@ -1,17 +1,15 @@
 import React from 'react';
-import { MDBContainer, MDBRow, MDBCol } from "mdbreact";
+import logo from './logo.svg';
+import PokemonList from './PokemonList.js'
 import './App.css';
 
-const gridExamplesPage = () => {
+function App() {
   return (
-  <MDBContainer>
-    <MDBRow>
-      <MDBCol md="4">.col-md-4</MDBCol>
-      <MDBCol md="4">.col-md-4</MDBCol>
-      <MDBCol md="4">.col-md-4</MDBCol>
-    </MDBRow>
-  </MDBContainer>
+    <div className="App">
+        <PokemonList>
+        </PokemonList>
+    </div>
   );
-  }
-  
-  export default gridExamplesPage;
+}
+
+export default App;
