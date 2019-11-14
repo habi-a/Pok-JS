@@ -46,26 +46,40 @@ class PokemonList extends Component {
                         fetch(url)
                         .then(response => response.json())
                         .then(result => {
+                            var i = 0;
                             var pokemons = [];
-                            for (var i = 0; i < result.results.length; i++) {
-                                let tmp = { id: 0, name: result.results[i].name, type: 'unknown', picture: 'https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png' }
+                            var fetchNow = function(i) {
                                 fetch(result.results[i].url)
                                 .then(response => response.json())
                                 .then(result_detail => {
-                                    tmp.picture = result_detail.sprites.front_default;
-                                    pokemons.push(tmp);
+                                    if (i < result.results.length) {
+                                        let tmp = { id: -666, name: result.results[i].name, type: ['unknown'], picture: 'https://wiki.p-insurgence.com/File:722.png' }
+                                        tmp.id = result_detail.id;
+                                        tmp.picture = result_detail.sprites.front_default;
+                                        if (result_detail.types.length)
+                                            tmp.type = [];
+                                        for (var j = 0; j < result_detail.types.length; j++)
+                                            tmp.type.push(result_detail.types[j].type.name);
+                                        tmp.type = tmp.type.join(", ");
+                                        pokemons.push(tmp);
+                                        i++;
+                                    }
+                                    if (i === result.results.length) {
+                                        resolve({
+                                            data: pokemons,
+                                            page: query.page,
+                                            totalCount: result.count
+                                        })
+                                    }
+                                    else
+                                        fetchNow(i);
                                 })
                             }
-                            resolve({
-                                data: pokemons,
-                                page: query.page,
-                                totalCount: result.count
-                            })
+                            fetchNow(i);
                         })
                     })
                 }
                 options={{
-                    sorting: true,
                     filtering: true
                 }}
                 actions={[{
