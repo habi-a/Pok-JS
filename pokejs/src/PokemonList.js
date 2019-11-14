@@ -1,42 +1,22 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
 import MaterialTable from 'material-table';
 
 class PokemonList extends Component {
-    componentDidMount() {
-        fetch("https://pokeapi.co/api/v2/pokemon?limit=964")
-        .then(res => res.json())
-        .then(
-            (result) => {
-                this.setState({
-                    isLoaded: true,
-                    pokemons: result.results
-                });
-            },
-            (error) => {
-                this.setState({
-                    isLoaded: true,
-                    error
-                });
-            }
-        )
-    }
-
     render() {
         return (
             <MaterialTable
                 title="Pokedex"
                 columns={[
-                    { title: 'ID', field: 'id', filtering: false },
-                    { title: 'Picture', field: 'picture', filtering: false, render: rowData => (
+                    { title: 'ID', field: 'id', searchable: false, filtering: false },
+                    { title: 'Picture', field: 'picture', searchable: false, filtering: false, render: rowData => (
                         <img
                             style={{ height: 36, borderRadius: '50%' }}
                             src={rowData.picture}
-                            alt={"A pokemon pics"}
+                            alt={"pokemon pics"}
                         />
                     )},
-                    { title: 'Name', field: 'name', type: 'string' },
-                    { title: 'Type', field: 'type', type: 'string' }
+                    { title: 'Name', field: 'name', type: 'string', filtering: false },
+                    { title: 'Type', field: 'type', searchable: false }
                 ]}
                 data={query =>
                     new Promise((resolve, reject) => {
@@ -53,7 +33,7 @@ class PokemonList extends Component {
                                 .then(response => response.json())
                                 .then(result_detail => {
                                     if (i < result.results.length) {
-                                        let tmp = { id: -666, name: result.results[i].name, type: ['unknown'], picture: 'https://wiki.p-insurgence.com/File:722.png' }
+                                        let tmp = { id: -666, name: result.results[i].name, type: ['unknown'], picture: 'https://wiki.p-insurgence.com/images/0/09/722.png' }
                                         tmp.id = result_detail.id;
                                         tmp.picture = result_detail.sprites.front_default;
                                         if (result_detail.types.length)
@@ -66,7 +46,7 @@ class PokemonList extends Component {
                                     }
                                     if (i === result.results.length) {
                                         resolve({
-                                            data: pokemons,
+                                            data: pokemons.filter(poke => poke.name.includes(query.search)),
                                             page: query.page,
                                             totalCount: result.count
                                         })
@@ -80,26 +60,27 @@ class PokemonList extends Component {
                     })
                 }
                 options={{
+                    search: true,
                     filtering: true
                 }}
-                actions={[{
-                    icon: 'details',
-                    tooltip: 'See details of the Pokemon',
-                    onClick: (event, rowData) => alert("You saved " + rowData.id)
+                detailPanel={[{
+                    tooltip: 'Show Name',
+                    render: rowData => {
+                        return (
+                            <div
+                            style={{
+                                fontSize: 100,
+                                textAlign: 'center',
+                                color: 'white',
+                                backgroundColor: '#43A047',
+                            }}
+                            >
+                            {rowData.id}
+                            </div>
+                        )
+                    },
                 }]}
-                components={{
-                    Action: props => (
-                        <Button
-                            onClick={(event) => props.action.onClick(event, props.data)}
-                            color="primary"
-                            variant="contained"
-                            style={{textTransform: 'none'}}
-                            size="small"
-                        >
-                            Details
-                        </Button>
-                    ),
-                }}
+                onRowClick={(event, rowData, togglePanel) => togglePanel()}
             />
         );
     }
