@@ -5,8 +5,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-        <PokemonList>
-        </PokemonList>
+        <PokemonList/>
     </div>
   );
 }

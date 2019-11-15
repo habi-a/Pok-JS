@@ -1,8 +1,43 @@
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
 
-class PokemonList extends Component {
-    render() {
+class PokemonList extends Component
+{
+    static type_list = {
+        'normal': 'normal',
+        'fire': 'fire',
+        'fighting': 'fighting',
+        'water': 'water',
+        'flying': 'flying',
+        'grass': 'grass',
+        'poison': 'poison',
+        'electric': 'electric',
+        'ground': 'ground',
+        'psychic': 'psychic',
+        'rock': 'rock',
+        'ice': 'ice',
+        'bug': 'bug',
+        'dragon': 'dragon',
+        'ghost': 'ghost',
+        'dark': 'dark',
+        'steel': 'steel',
+        'fairy': 'fairy',
+        'unknwon': 'unknwon',
+        'shadow': 'shadow'
+    }
+
+    static filters(pokemons, query)
+    {
+        pokemons = pokemons.filter(poke => poke.name.includes(query.search));
+        if (query.filters.length !== 0) {
+            for (var i = 0; i < query.filters[0].value.length; i++)
+                pokemons = pokemons.filter(poke => poke.type.includes(query.filters[0].value[i]));
+        }
+        return pokemons;
+    }
+
+    render()
+    {
         return (
             <MaterialTable
                 title="Pokedex"
@@ -12,11 +47,11 @@ class PokemonList extends Component {
                         <img
                             style={{ height: 36, borderRadius: '50%' }}
                             src={rowData.picture}
-                            alt={"pokemon pics"}
+                            alt={"no_picture"}
                         />
                     )},
                     { title: 'Name', field: 'name', type: 'string', filtering: false },
-                    { title: 'Type', field: 'type', searchable: false }
+                    { title: 'Type', field: 'type', searchable: false, lookup: PokemonList.type_list}
                 ]}
                 data={query =>
                     new Promise((resolve, reject) => {
@@ -45,8 +80,9 @@ class PokemonList extends Component {
                                         i++;
                                     }
                                     if (i === result.results.length) {
+                                        pokemons = PokemonList.filters(pokemons, query);
                                         resolve({
-                                            data: pokemons.filter(poke => poke.name.includes(query.search)),
+                                            data: pokemons,
                                             page: query.page,
                                             totalCount: result.count
                                         })
@@ -59,6 +95,7 @@ class PokemonList extends Component {
                         })
                     })
                 }
+                pageSizeOptions={[5, 10, 20, 50]}
                 options={{
                     search: true,
                     filtering: true
