@@ -95,10 +95,10 @@ class PokemonList extends Component
                         })
                     })
                 }
-                pageSizeOptions={[5, 10, 20, 50]}
                 options={{
                     search: true,
-                    filtering: true
+                    filtering: true,
+                    pageSizeOptions: [5, 10, 20, 50]
                 }}
                 detailPanel={[{
                     tooltip: 'Show Name',
