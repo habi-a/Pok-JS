@@ -45,13 +45,21 @@ class PokemonList extends Component
                     { title: 'ID', field: 'id', searchable: false, filtering: false },
                     { title: 'Picture', field: 'picture', searchable: false, filtering: false, render: rowData => (
                         <img
-                            style={{ height: 36, borderRadius: '50%' }}
+                            style={{ height: 50, borderRadius: '50%' }}
                             src={rowData.picture}
                             alt={"no_picture"}
                         />
                     )},
                     { title: 'Name', field: 'name', type: 'string', filtering: false },
-                    { title: 'Type', field: 'type', searchable: false, lookup: PokemonList.type_list}
+                    { title: 'Type', field: 'type', searchable: false, lookup: PokemonList.type_list, render: (rowData) => {
+                        let table = []
+                        let types = rowData.type.split(', ');
+
+                        for (let i = 0; i < types.length; i++) {
+                            table.push(<tr>{types[i]}</tr>)
+                        }
+                        return table
+                    }}
                 ]}
                 data={query =>
                     new Promise((resolve, reject) => {
@@ -98,7 +106,11 @@ class PokemonList extends Component
                 options={{
                     search: true,
                     filtering: true,
-                    pageSizeOptions: [5, 10, 20, 50]
+                    pageSizeOptions: [5, 10, 20, 50],
+                    headerStyle: {
+                      backgroundColor: '#01579b',
+                      color: '#FFF'
+                    }
                 }}
                 detailPanel={[{
                     tooltip: 'Show Name',
