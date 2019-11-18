@@ -7,8 +7,6 @@ class PokemonList extends Component
         super(props);
         this.state = {
             error: null,
-            moveIsLoaded: false,
-            typeIsLoaded: false,
             move_list: {},
             type_list: {}
         }
@@ -23,13 +21,11 @@ class PokemonList extends Component
                 for (let i = 0; i < result.count; i++)
                     tmp_moves[result.results[i].name] = result.results[i].name;
                 this.setState({
-                    moveIsLoaded: true,
                     move_list: tmp_moves
                 });
             },
             (error) => {
                 this.setState({
-                    moveIsLoaded: true,
                     error
                 });
             }
@@ -42,13 +38,11 @@ class PokemonList extends Component
                 for (let i = 0; i < result.count; i++)
                     tmp_types[result.results[i].name] = result.results[i].name;
                 this.setState({
-                    typeIsLoaded: true,
                     type_list: tmp_types
                 });
             },
             (error) => {
                 this.setState({
-                    typeIsLoaded: true,
                     error
                 });
             }
