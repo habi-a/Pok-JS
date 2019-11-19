@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import MaterialTable from 'material-table';
 
+import PokemonDetail from './components/PokemonDetail/PokemonDetail.js'
+
 class PokemonList extends Component
 {
     constructor(props) {
@@ -118,16 +120,8 @@ class PokemonList extends Component
                                             let tmp = { id: -666, name: result.results[i].name, type: ['unknown'], picture: 'https://wiki.p-insurgence.com/images/0/09/722.png', move: ['no_moves'] }
                                             tmp.id = result_detail.id;
                                             tmp.picture = result_detail.sprites.front_default;
-                                            if (result_detail.types.length)
-                                                tmp.type = [];
-                                            if (result_detail.moves.length)
-                                                tmp.move = [];
-                                            for (let j = 0; j < result_detail.types.length; j++)
-                                                tmp.type.push(result_detail.types[j].type.name);
-                                            for (let j = 0; j < result_detail.moves.length; j++)
-                                                tmp.move.push(result_detail.moves[j].move.name);
-                                            tmp.type = tmp.type.join(", ");
-                                            tmp.move = tmp.move.join(", ");
+                                            tmp.type = PokemonDetail.arrayFill(result_detail.types, 'type');
+                                            tmp.move = PokemonDetail.arrayFill(result_detail.moves, 'move');
                                             pokemons.push(tmp);
                                             i++;
                                         }
@@ -163,16 +157,7 @@ class PokemonList extends Component
                         tooltip: 'Show Details',
                         render: rowData => {
                             return (
-                                <div
-                                style={{
-                                    fontSize: 100,
-                                    textAlign: 'center',
-                                    color: 'white',
-                                    backgroundColor: '#43A047',
-                                }}
-                                >
-                                {rowData.id}
-                                </div>
+                                <PokemonDetail id={rowData.id} />
                             )
                         },
                     }]}
