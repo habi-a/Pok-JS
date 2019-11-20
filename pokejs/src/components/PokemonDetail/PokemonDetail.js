@@ -54,6 +54,7 @@ class PokemonDetail extends Component {
         this.state = {
             error: null,
             name: '',
+            description: '',
             family: '',
             imageUrl: '',
             pokemonIndex: '',
@@ -69,15 +70,31 @@ class PokemonDetail extends Component {
         .then(res => res.json())
         .then(
             (result) => {
-                this.setState({
-                    isLoaded: true,
-                    pokemonIndex: this.props.id,
-                    name: result.name,
-                    types: PokemonDetail.arrayFill(result.types, 'type'),
-                    moves: PokemonDetail.arrayFill(result.moves, 'move'),
-                    items: PokemonDetail.arrayFill(result.items, 'item'),
-                    imageUrl: result.sprites.front_default
-                });
+                fetch(result.species.url)
+                .then(res => res.json())
+                .then(
+                    (result_species) => {
+                        let i = (result_species.flavor_text_entries[1].language.name === "en") ? 1 : 2;
+                        let j = (result_species.genera[1].language.name === "en") ? 1 : 2;
+                        this.setState({
+                            isLoaded: true,
+                            pokemonIndex: this.props.id,
+                            name: result.name,
+                            description: result_species.flavor_text_entries[i].flavor_text,
+                            family: result_species.genera[j].genus,
+                            types: PokemonDetail.arrayFill(result.types, 'type'),
+                            moves: PokemonDetail.arrayFill(result.moves, 'move'),
+                            items: PokemonDetail.arrayFill(result.items, 'item'),
+                            imageUrl: result.sprites.front_default
+                        });
+                    },
+                    (error) => {
+                        this.setState({
+                            isLoaded: true,
+                            error
+                        });
+                    }
+                )
             },
             (error) => {
                 this.setState({
@@ -89,7 +106,7 @@ class PokemonDetail extends Component {
     }
 
     render() {
-        const { error, name, pokemonIndex, types, moves, items, imageUrl} = this.state;
+        const { error, name, pokemonIndex, description, family, types, moves, items, imageUrl} = this.state;
         if (error) {
             return <div>Erreur : {error.message}</div>;
         } else {
@@ -175,7 +192,7 @@ class PokemonDetail extends Component {
                     <div className="separator"></div>
                     <div className="describe">
                         <p className="title">Describes : </p>
-                        <p>	Ce POKéMON dispose de petites poches dans les joues pour stocker de l'électricité. Elles semblent se charger pendant que PIKACHU dort. Il libère parfois un peu d'électricité lorsqu'il n'est pas encore bien réveillé.</p>
+                        <p>{description}</p>
                     </div>
                     <div className="separator"></div>
 
@@ -207,7 +224,7 @@ class PokemonDetail extends Component {
 
                     <div className="family">
                         <p className="title">Family : </p>
-                        <p>la famille à laquelle il appartient (par exemple, Pikachu est un Mouse Pokémon);</p>
+                        <p>{family}</p>
                     </div>
 
                 </div>
