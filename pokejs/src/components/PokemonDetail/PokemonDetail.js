@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-
 import './Pokemon.css';
-
 
 function PokemonMoves(props) {
     var table = []
@@ -21,6 +19,20 @@ function PokemonItems(props) {
         table.push(<li>{items[i]}</li>)
     }
     return table
+}
+
+function goToPrevSlide () {
+  let i = 0;
+  const {imageUrl} = this.state;
+  const newPointer = imageUrl[i] === 0 ? this.images.length -1 : imageUrl[i] - 1;
+  this.setState({currentIndex: newPointer});
+}
+
+function goToNextSlide ()  {
+  let i = 0;
+  const {imageUrl} = this.state;
+  const newPointer = imageUrl[i] === this.images.length - 1 ? 0 : imageUrl[i] + 1;
+  this.setState({currentIndex: newPointer});
 }
 
 class PokemonDetail extends Component {
@@ -61,9 +73,16 @@ class PokemonDetail extends Component {
             types: '',
             moves: '',
             items: '',
+            stats: {
+                hp: '',
+                attack: '',
+                defense: '',
+                speed: '',
+            },
             isLoaded: false,
         }
     }
+
 
     componentDidMount() {
         fetch("https://pokeapi.co/api/v2/pokemon/" + this.props.id)
@@ -130,67 +149,22 @@ class PokemonDetail extends Component {
                         src={imageUrl[0]}
                         alt='no_picture'
                     />
+                    <button className = "prev" onClick={this.goToPrevSlide}>&#10094;</button>
+                    <button className = "next" onClick={this.goToNextSlide}>&#10095;</button>
+
 
                     <div className="stats-poke left">
                         <div>HP</div>
                         <div>Attack</div>
-                        <div>Defensive</div>
+                        <div>Defense</div>
                         <div>Speed</div>
                     </div>
 
                     <div className="stats-poke right">
-                        <div
-                        className="progress-bar "
-                        role="progressbar"
-                        style={{
-                            width: "800%",
-                            backgroundColor: `#0164f9`
-                        }}
-                        aria-valuenow="25"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        >
-                            <small>100</small>
-                        </div>
-                        <div
-                        className="progress-bar "
-                        role="progressbar"
-                        style={{
-                            width: "800%",
-                            backgroundColor: `#0164f9`
-                        }}
-                        aria-valuenow="25"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        >
-                            <small>50</small>
-                        </div>
-                        <div
-                        className="progress-bar "
-                        role="progressbar"
-                        style={{
-                            width: "800%",
-                            backgroundColor: `#0164f9`
-                        }}
-                        aria-valuenow="25"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        >
-                            <small>80</small>
-                        </div>
-                        <div
-                        className="progress-bar "
-                        role="progressbar"
-                        style={{
-                            width: "800%",
-                            backgroundColor: `#0164f9`
-                        }}
-                        aria-valuenow="25"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                        >
-                            <small>20</small>
-                        </div>
+                        <div>{this.state.stats.hp}</div>
+                        <div>{this.state.stats.attack}</div>
+                        <div>{this.state.stats.defense}</div>
+                        <div>{this.state.stats.speed}</div>
                     </div>
                 </div>
                 <div className="separator"></div>

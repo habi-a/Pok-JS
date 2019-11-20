@@ -61,6 +61,7 @@
 .left {
     display: block;
     text-align: left;
+    margin-top: -111px;
 }
 
 .right {
