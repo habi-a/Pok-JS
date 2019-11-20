@@ -8,7 +8,7 @@ function PokemonMoves(props) {
     var moves = props.moves.split(', ');
 
     for (let i = 0; i < moves.length; i++) {
-        table.push(<li>{moves[i]}</li>)
+        table.push(<li>{moves[i]} , </li>)
     }
     return table
 }
@@ -98,7 +98,6 @@ class PokemonDetail extends Component {
                     <div className="header">{name}</div>
                     <div className="id">No. {pokemonIndex}</div>
                     <div className="types">{types}</div>
-                    <div className="types">TYPES POKEMON</div>
                     <div className="content">
                     <br />
                     <img className="card-poke-img"
@@ -171,7 +170,7 @@ class PokemonDetail extends Component {
                 <div className="separator"></div>
                     <div className="moves">
                         <p className="title">Moves : </p>
-                        <PokemonMoves moves={moves} />
+                        <p><PokemonMoves moves={moves} /></p>
                     </div>
                     <div className="separator"></div>
                     <div className="describe">
