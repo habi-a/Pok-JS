@@ -56,7 +56,7 @@ class PokemonDetail extends Component {
             name: '',
             description: '',
             family: '',
-            imageUrl: '',
+            imageUrl: [],
             pokemonIndex: '',
             types: '',
             moves: '',
@@ -85,7 +85,16 @@ class PokemonDetail extends Component {
                             types: PokemonDetail.arrayFill(result.types, 'type'),
                             moves: PokemonDetail.arrayFill(result.moves, 'move'),
                             items: PokemonDetail.arrayFill(result.items, 'item'),
-                            imageUrl: result.sprites.front_default
+                            imageUrl: [
+                                result.sprites.front_default,
+                                result.sprites.back_default,
+                                result.sprites.front_female,
+                                result.sprites.back_female,
+                                result.sprites.front_shiny,
+                                result.sprites.back_shiny,
+                                result.sprites.front_shiny_female,
+                                result.sprites.back_shiny_female
+                            ]
                         });
                     },
                     (error) => {
@@ -118,7 +127,7 @@ class PokemonDetail extends Component {
                     <div className="content">
                     <br />
                     <img className="card-poke-img"
-                        src={imageUrl}
+                        src={imageUrl[0]}
                         alt='no_picture'
                     />
 
@@ -200,15 +209,15 @@ class PokemonDetail extends Component {
                     <p className="title">Evolutions : </p>
                     <div className="evolutions">
                         <img className="column"
-                            src={imageUrl}
+                            src={imageUrl[0]}
                             alt='no_picture'
                         />
                         <img className="column"
-                            src={imageUrl}
+                            src={imageUrl[0]}
                             alt='no_picture'
                         />
                         <img className="column"
-                            src={imageUrl}
+                            src={imageUrl[0]}
                             alt='no_picture'
                         />
                     </div>
