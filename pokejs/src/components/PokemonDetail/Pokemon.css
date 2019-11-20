@@ -93,9 +93,11 @@
     width: 10%;
 }
 
-.items {
-    text-align: center;
-    list-style-type: none;
+.items li{
+    display: initial;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 1%;
 }
 
 .family {
