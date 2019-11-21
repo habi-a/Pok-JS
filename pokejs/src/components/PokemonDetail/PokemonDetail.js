@@ -47,19 +47,6 @@ class PokemonDetail extends Component {
         return tmp;
     }
 
-    goToPrevSlide () {
-      let i = 0;
-      const {imageUrl} = this.state;
-      const newPointer = imageUrl[i] === 0 ? this.imageUrl[i].length -1 : imageUrl[i] - 1;
-      this.setState({currentIndex: newPointer});
-    }
-
-    goToNextSlide ()  {
-      let i = 0;
-      const {imageUrl} = this.state;
-      const newPointer = imageUrl[i] === this.imageUrl[i].length - 1 ? 0 : imageUrl[i] + 1;
-      this.setState({currentIndex: newPointer});
-    }
 
     constructor(props) {
         super(props);
@@ -74,6 +61,7 @@ class PokemonDetail extends Component {
             types: '',
             moves: '',
             items: '',
+            currentIndex: 0,
             stats: {
                 hp: '',
                 attack: '',
@@ -164,7 +152,7 @@ class PokemonDetail extends Component {
     }
 
     render() {
-        const { error, name, pokemonIndex, description, family, stats, types, moves, items, imageUrl} = this.state;
+        const { error, currentIndex, name, pokemonIndex, description, family, stats, types, moves, items, imageUrl} = this.state;
         if (error) {
             return <div>Erreur : {error.message}</div>;
         } else {
@@ -176,11 +164,17 @@ class PokemonDetail extends Component {
                     <div className="content">
                     <br />
                     <img className="card-poke-img"
-                        src={imageUrl[0]}
+                        src={imageUrl[currentIndex]}
                         alt='no_picture'
                     />
-                    <button className = "prev" onClick={this.goToPrevSlide}>&#10094;</button>
-                    <button className = "next" onClick={this.goToNextSlide}>&#10095;</button>
+                    <button className = "prev" onClick={() => {
+                        var index = (currentIndex - 1 < 0) ? 7 : currentIndex - 1;
+                        this.setState({currentIndex: index});
+                    }}>&#10094;</button>
+                    <button className = "next" onClick={() => {
+                        var index = (currentIndex + 1 > 7) ? 0 : currentIndex + 1;
+                        this.setState({currentIndex: index});
+                    }}>&#10095;</button>
 
 
                     <div className="stats-poke left">
