@@ -69,6 +69,7 @@ class PokemonDetail extends Component {
             description: '',
             family: '',
             imageUrl: [],
+            evolutions: [],
             pokemonIndex: '',
             types: '',
             moves: '',
@@ -93,28 +94,57 @@ class PokemonDetail extends Component {
                 .then(res => res.json())
                 .then(
                     (result_species) => {
-                        let i = (result_species.flavor_text_entries[1].language.name === "en") ? 1 : 2;
-                        let j = (result_species.genera[1].language.name === "en") ? 1 : 2;
-                        this.setState({
-                            isLoaded: true,
-                            pokemonIndex: this.props.id,
-                            name: result.name,
-                            description: result_species.flavor_text_entries[i].flavor_text,
-                            family: result_species.genera[j].genus,
-                            types: PokemonDetail.arrayFill(result.types, 'type'),
-                            moves: PokemonDetail.arrayFill(result.moves, 'move'),
-                            items: PokemonDetail.arrayFill(result.items, 'item'),
-                            imageUrl: [
-                                result.sprites.front_default,
-                                result.sprites.back_default,
-                                result.sprites.front_female,
-                                result.sprites.back_female,
-                                result.sprites.front_shiny,
-                                result.sprites.back_shiny,
-                                result.sprites.front_shiny_female,
-                                result.sprites.back_shiny_female
-                            ]
-                        });
+                        fetch(result_species.evolution_chain.url)
+                        .then(res => res.json())
+                        .then(
+                            (result_evolution) => {
+                                let i = (result_species.flavor_text_entries[1].language.name === "en") ? 1 : 2;
+                                let j = (result_species.genera[1].language.name === "en") ? 1 : 2;
+                                let tmp_evolutions = [result_evolution.chain.species.name];
+                                if (result_evolution.chain.evolves_to.length !== 0) {
+                                    tmp_evolutions.push(result_evolution.chain.evolves_to[0].species.name)
+                                    if (result_evolution.chain.evolves_to[0].evolves_to.length !== 0) {
+                                        tmp_evolutions.push(result_evolution.chain.evolves_to[0].evolves_to[0].species.name);
+                                        if (result_evolution.chain.evolves_to[0].evolves_to[0].evolves_to.length !== 0) {
+                                            tmp_evolutions.push(result_evolution.chain.evolves_to[0].evolves_to[0].evolves_to[0].species.name);
+                                        }
+                                    }
+                                }
+                                this.setState({
+                                    isLoaded: true,
+                                    pokemonIndex: this.props.id,
+                                    name: result.name,
+                                    description: result_species.flavor_text_entries[i].flavor_text,
+                                    family: result_species.genera[j].genus,
+                                    types: PokemonDetail.arrayFill(result.types, 'type'),
+                                    moves: PokemonDetail.arrayFill(result.moves, 'move'),
+                                    items: PokemonDetail.arrayFill(result.items, 'item'),
+                                    evolutions: tmp_evolutions,
+                                    stats: {
+                                        hp: result.stats[5].base_stat,
+                                        attack: result.stats[4].base_stat,
+                                        defense: result.stats[3].base_stat,
+                                        speed: result.stats[0].base_stat
+                                    },
+                                    imageUrl: [
+                                        result.sprites.front_default,
+                                        result.sprites.back_default,
+                                        result.sprites.front_female,
+                                        result.sprites.back_female,
+                                        result.sprites.front_shiny,
+                                        result.sprites.back_shiny,
+                                        result.sprites.front_shiny_female,
+                                        result.sprites.back_shiny_female
+                                    ]
+                                });
+                            },
+                            (error) => {
+                                this.setState({
+                                    isLoaded: true,
+                                    error
+                                });
+                            }
+                        )
                     },
                     (error) => {
                         this.setState({
@@ -134,7 +164,7 @@ class PokemonDetail extends Component {
     }
 
     render() {
-        const { error, name, pokemonIndex, description, family, types, moves, items, imageUrl} = this.state;
+        const { error, name, pokemonIndex, description, family, stats, types, moves, items, imageUrl} = this.state;
         if (error) {
             return <div>Erreur : {error.message}</div>;
         } else {
@@ -161,10 +191,10 @@ class PokemonDetail extends Component {
                     </div>
 
                     <div className="stats-poke right">
-                        <div>{this.state.stats.hp}</div>
-                        <div>{this.state.stats.attack}</div>
-                        <div>{this.state.stats.defense}</div>
-                        <div>{this.state.stats.speed}</div>
+                        <div>{stats.hp}</div>
+                        <div>{stats.attack}</div>
+                        <div>{stats.defense}</div>
+                        <div>{stats.speed}</div>
                     </div>
                 </div>
                 <div className="separator"></div>
