@@ -21,20 +21,6 @@ function PokemonItems(props) {
     return table
 }
 
-function goToPrevSlide () {
-  let i = 0;
-  const {imageUrl} = this.state;
-  const newPointer = imageUrl[i] === 0 ? this.images.length -1 : imageUrl[i] - 1;
-  this.setState({currentIndex: newPointer});
-}
-
-function goToNextSlide ()  {
-  let i = 0;
-  const {imageUrl} = this.state;
-  const newPointer = imageUrl[i] === this.images.length - 1 ? 0 : imageUrl[i] + 1;
-  this.setState({currentIndex: newPointer});
-}
-
 class PokemonDetail extends Component {
     static arrayFill(arrayToFill, valueToFill) {
         var tmp = ['no_data'];
@@ -59,6 +45,20 @@ class PokemonDetail extends Component {
         }
         tmp = tmp.join(", ");
         return tmp;
+    }
+
+    goToPrevSlide () {
+      let i = 0;
+      const {imageUrl} = this.state;
+      const newPointer = imageUrl[i] === 0 ? this.imageUrl[i].length -1 : imageUrl[i] - 1;
+      this.setState({currentIndex: newPointer});
+    }
+
+    goToNextSlide ()  {
+      let i = 0;
+      const {imageUrl} = this.state;
+      const newPointer = imageUrl[i] === this.imageUrl[i].length - 1 ? 0 : imageUrl[i] + 1;
+      this.setState({currentIndex: newPointer});
     }
 
     constructor(props) {
