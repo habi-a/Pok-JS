@@ -203,21 +203,13 @@ class PokemonDetail extends Component {
                     </div>
                     <div className="separator"></div>
 
-
-                    <p className="title">Evolutions : </p>
-                    <div className="evolutions">
-                        <img className="column"
-                            src={imageUrl[0]}
-                            alt='no_picture'
-                        />
-                        <img className="column"
-                            src={imageUrl[0]}
-                            alt='no_picture'
-                        />
-                        <img className="column"
-                            src={imageUrl[0]}
-                            alt='no_picture'
-                        />
+                    <div className="evolutionsdiv">
+                        <p className="title">Evolutions : </p>
+                        <ul className="evolutions">
+                            <li>test</li>
+                            <li>test</li>
+                            <li>test</li>
+                        </ul>
                     </div>
                     <div className="separator"></div>
 
