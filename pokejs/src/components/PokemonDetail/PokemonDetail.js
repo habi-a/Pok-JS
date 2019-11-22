@@ -23,10 +23,9 @@ function PokemonItems(props) {
 
 function PokemonEvolutions(props) {
     var table = []
-    var evolutions = props.evolutions.split(', ');
 
-    for (let i = 0; i < evolutions.length; i++) {
-        table.push(<li>{evolutions[i]}</li>)
+    for (let i = 0; i < props.evolutions.length; i++) {
+        table.push(<li>{props.evolutions[i]}</li>)
     }
     return table
 }
@@ -162,7 +161,7 @@ class PokemonDetail extends Component {
     }
 
     render() {
-        const { error, currentIndex, name, pokemonIndex, description, family, stats, types, moves, items, imageUrl} = this.state;
+        const { error, evolutions, currentIndex, name, pokemonIndex, description, family, stats, types, moves, items, imageUrl} = this.state;
         if (error) {
             return <div>Erreur : {error.message}</div>;
         } else {
@@ -216,9 +215,7 @@ class PokemonDetail extends Component {
                     <div className="evolutionsdiv">
                         <p className="title">Evolutions : </p>
                         <ul className="evolutions">
-                            <li>test</li>
-                            <li>test</li>
-                            <li>test</li>
+                            <PokemonEvolutions evolutions={evolutions} />
                         </ul>
                     </div>
                     <div className="separator"></div>
