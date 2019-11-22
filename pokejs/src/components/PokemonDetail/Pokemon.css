@@ -82,9 +82,18 @@
 }
 
 .evolutions {
-    display: flex;
-    margin-top: -2%;
-    margin-bottom: -3%;
+  list-style-type: none;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.evolutions li {
+    display: inline-block;
+    font-size: 25px;
+    font-family: cursive;
+    padding: 10px;
+    width: 20%;
 }
 
 .column {
