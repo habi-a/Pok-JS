@@ -21,6 +21,16 @@ function PokemonItems(props) {
     return table
 }
 
+function PokemonEvolutions(props) {
+    var table = []
+    var evolutions = props.evolutions.split(', ');
+
+    for (let i = 0; i < evolutions.length; i++) {
+        table.push(<li>{evolutions[i]}</li>)
+    }
+    return table
+}
+
 class PokemonDetail extends Component {
     static arrayFill(arrayToFill, valueToFill) {
         var tmp = ['no_data'];
